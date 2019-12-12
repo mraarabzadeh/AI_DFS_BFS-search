@@ -1,6 +1,6 @@
 from collections import deque
 import subprocess as sp
-import time, heapq
+import time, heapq, time
 PATH = "F:\\Root\\ut\\7\\ai\\prj1\\test"
 LINK_STATE = {}
 
@@ -134,8 +134,12 @@ def dfs(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods, pq_
             pmatrix[int(item/size_of_line)][item%size_of_line]=1
             if item in pq_foods:
                 pq_foods.remove(item)
+                start_ids(num_of_line, size_of_line, item, q_location, p_foods, q_foods, pq_foods)
+                return
             if item in p_foods:
                 p_foods.remove(item)
+                start_ids(num_of_line, size_of_line, item, q_location, p_foods, q_foods, pq_foods)
+                return
             dfs(num_of_line, size_of_line, item, q_location, p_foods, q_foods, pq_foods, depgh + 1, max_depgh, pmatrix)
     return 
 
@@ -194,11 +198,12 @@ def change_state(heap, p_nei, q_nei, size_of_line):
         heap.append(newitem)
     heapq.heapify(heap)
     return heap
-
+start_time = time.time()
 for i in range(1,6):
     link_state, num_of_line, size_of_line, p_location, q_location, p_foods, q_foods, pq_foods= make_graph_from_file(PATH+str(i))
     LINK_STATE = link_state.copy()
-    start_bfs(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods,pq_foods)
+    # start_bfs(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods,pq_foods)
     # start_ids(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods, pq_foods)
-    # start_Astar(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods, pq_foods)
+    start_Astar(num_of_line, size_of_line, p_location, q_location, p_foods, q_foods, pq_foods)
     print(p_foods, q_foods, pq_foods)
+print('time take:', time.time()-start_time)
